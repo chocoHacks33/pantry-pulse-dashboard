@@ -2,6 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 
 const {
+  filterInventoryByCategory,
   formatCurrency,
   getInventorySummary,
   getItemValue,
@@ -41,5 +42,21 @@ test("getInventorySummary handles an empty pantry", () => {
 
 test("formatCurrency uses Singapore dollar formatting by default", () => {
   assert.equal(formatCurrency(12.5), "$12.50");
+});
+
+test("filterInventoryByCategory returns only items in the selected category", () => {
+  const items = [
+    { name: "Rice", category: "Grains" },
+    { name: "Oats", category: "Breakfast" },
+    { name: "Pasta", category: "Grains" },
+  ];
+
+  assert.deepEqual(filterInventoryByCategory(items, "Grains"), [items[0], items[2]]);
+});
+
+test("filterInventoryByCategory preserves all items for the all option", () => {
+  const items = [{ category: "Grains" }, { category: "Spreads" }];
+  assert.deepEqual(filterInventoryByCategory(items, "all"), items);
+  assert.notEqual(filterInventoryByCategory(items, "all"), items);
 });
 
