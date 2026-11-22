@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A lightweight dashboard for keeping household pantry stock visible." />
+    <title>Pantry Pulse</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#inventory">Skip to pantry inventory</a>
+    <main class="shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">HOUSEHOLD PANTRY</p>
+          <h1>Pantry Pulse</h1>
+          <p class="intro">A calm snapshot of what is on hand before the next grocery run.</p>
+        </div>
+        <div class="hero-badge" aria-label="Inventory status">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          Sample pantry synced
+        </div>
+      </header>
+
+      <section class="summary-grid" aria-label="Pantry summary">
+        <article class="summary-card">
+          <p>Pantry items</p>
+          <strong id="item-count">0</strong>
+          <span>unique staples</span>
+        </article>
+        <article class="summary-card">
+          <p>Units on hand</p>
+          <strong id="unit-count">0</strong>
+          <span>across all items</span>
+        </article>
+        <article class="summary-card accent-card">
+          <p>Inventory value</p>
+          <strong id="inventory-value">$0.00</strong>
+          <span>estimated replacement cost</span>
+        </article>
+        <article class="summary-card">
+          <p>Categories</p>
+          <strong id="category-count">0</strong>
+          <span>represented today</span>
+        </article>
+      </section>
+
+      <section class="panel" id="inventory" aria-labelledby="inventory-title">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">CURRENT STOCK</p>
+            <h2 id="inventory-title">Pantry inventory</h2>
+          </div>
+          <p class="updated" id="last-updated" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <caption class="sr-only">Current pantry items and their quantities, categories, and estimated values</caption>
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Category</th>
+                <th scope="col">On hand</th>
+                <th scope="col">Unit price</th>
+                <th scope="col">Value</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="lib/pantry.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
+

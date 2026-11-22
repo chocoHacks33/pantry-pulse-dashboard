@@ -1,0 +1,11 @@
+{
+  "name": "pantry-pulse-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A dependency-free dashboard for keeping a household pantry visible and useful.",
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check lib/pantry.js && node --check app.js && node --test"
+  }
+}
+
