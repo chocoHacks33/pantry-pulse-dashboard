@@ -9,7 +9,12 @@ const pantryItems = [
   { id: 8, name: "Tomato passata", category: "Sauces", quantity: 1, unit: "bottle", unitPrice: 3.8, expires: "2026-11-29", restockAt: 2 },
 ];
 
-const { formatCurrency, getInventorySummary, getItemValue } = PantryMetrics;
+const {
+  filterInventoryByCategory,
+  formatCurrency,
+  getInventorySummary,
+  getItemValue,
+} = PantryMetrics;
 
 function setText(id, value) {
   document.getElementById(id).textContent = value;
@@ -46,6 +51,26 @@ function renderInventory(items) {
   }
 }
 
+function updateInventoryView(category = "all") {
+  const visibleItems = filterInventoryByCategory(pantryItems, category);
+  renderInventory(visibleItems);
+  setText("inventory-results", `${visibleItems.length} ${visibleItems.length === 1 ? "item" : "items"} shown`);
+}
+
+function initializeCategoryFilter() {
+  const filter = document.getElementById("category-filter");
+  const categories = [...new Set(pantryItems.map((item) => item.category))].sort();
+
+  for (const category of categories) {
+    const option = document.createElement("option");
+    option.value = category;
+    option.textContent = category;
+    filter.append(option);
+  }
+
+  filter.addEventListener("change", () => updateInventoryView(filter.value));
+}
+
 function renderDashboard() {
   const summary = getInventorySummary(pantryItems);
 
@@ -54,7 +79,8 @@ function renderDashboard() {
   setText("inventory-value", formatCurrency(summary.totalValue));
   setText("category-count", summary.categoryCount);
   setText("last-updated", `Updated ${new Intl.DateTimeFormat("en-SG", { dateStyle: "medium" }).format(new Date())}`);
-  renderInventory(pantryItems);
+  initializeCategoryFilter();
+  updateInventoryView();
 }
 
 renderDashboard();
