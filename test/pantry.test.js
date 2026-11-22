@@ -5,6 +5,7 @@ const {
   formatCurrency,
   getInventorySummary,
   getItemValue,
+  getRestockItems,
 } = require("../lib/pantry.js");
 
 test("getItemValue multiplies quantity by unit price", () => {
@@ -41,5 +42,35 @@ test("getInventorySummary handles an empty pantry", () => {
 
 test("formatCurrency uses Singapore dollar formatting by default", () => {
   assert.equal(formatCurrency(12.5), "$12.50");
+});
+
+test("getRestockItems includes stock at or below its threshold", () => {
+  const result = getRestockItems([
+    { name: "Rice", quantity: 1, restockAt: 1 },
+    { name: "Oats", quantity: 3, restockAt: 1 },
+    { name: "Passata", quantity: 1, restockAt: 2 },
+  ]);
+
+  assert.deepEqual(
+    result.map(({ name, unitsNeeded }) => ({ name, unitsNeeded })),
+    [
+      { name: "Passata", unitsNeeded: 2 },
+      { name: "Rice", unitsNeeded: 1 },
+    ],
+  );
+});
+
+test("getRestockItems sorts equal shortfalls by item name", () => {
+  const result = getRestockItems([
+    { name: "Tomatoes", quantity: 1, restockAt: 1 },
+    { name: "Beans", quantity: 2, restockAt: 2 },
+  ]);
+  assert.deepEqual(result.map((item) => item.name), ["Beans", "Tomatoes"]);
+});
+
+test("getRestockItems keeps the source inventory unchanged", () => {
+  const item = { name: "Rice", quantity: 1, restockAt: 1 };
+  getRestockItems([item]);
+  assert.equal("unitsNeeded" in item, false);
 });
 
