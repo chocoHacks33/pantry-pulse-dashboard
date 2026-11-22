@@ -9,7 +9,12 @@ const pantryItems = [
   { id: 8, name: "Tomato passata", category: "Sauces", quantity: 1, unit: "bottle", unitPrice: 3.8, expires: "2026-11-29", restockAt: 2 },
 ];
 
-const { formatCurrency, getInventorySummary, getItemValue } = PantryMetrics;
+const {
+  buildInventoryCsv,
+  formatCurrency,
+  getInventorySummary,
+  getItemValue,
+} = PantryMetrics;
 
 function setText(id, value) {
   document.getElementById(id).textContent = value;
@@ -46,6 +51,21 @@ function renderInventory(items) {
   }
 }
 
+function downloadInventoryCsv() {
+  const csv = buildInventoryCsv(pantryItems);
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const date = new Date().toISOString().slice(0, 10);
+
+  link.href = url;
+  link.download = `pantry-inventory-${date}.csv`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
 function renderDashboard() {
   const summary = getInventorySummary(pantryItems);
 
@@ -55,6 +75,7 @@ function renderDashboard() {
   setText("category-count", summary.categoryCount);
   setText("last-updated", `Updated ${new Intl.DateTimeFormat("en-SG", { dateStyle: "medium" }).format(new Date())}`);
   renderInventory(pantryItems);
+  document.getElementById("export-inventory").addEventListener("click", downloadInventoryCsv);
 }
 
 renderDashboard();
