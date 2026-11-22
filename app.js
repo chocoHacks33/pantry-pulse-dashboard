@@ -9,7 +9,12 @@ const pantryItems = [
   { id: 8, name: "Tomato passata", category: "Sauces", quantity: 1, unit: "bottle", unitPrice: 3.8, expires: "2026-11-29", restockAt: 2 },
 ];
 
-const { formatCurrency, getInventorySummary, getItemValue } = PantryMetrics;
+const {
+  formatCurrency,
+  getExpiringItems,
+  getInventorySummary,
+  getItemValue,
+} = PantryMetrics;
 
 function setText(id, value) {
   document.getElementById(id).textContent = value;
@@ -46,6 +51,45 @@ function renderInventory(items) {
   }
 }
 
+function formatExpiryTiming(daysUntil) {
+  if (daysUntil === 0) return "Expires today";
+  if (daysUntil === 1) return "Expires tomorrow";
+  return `Expires in ${daysUntil} days`;
+}
+
+function renderExpiryPlanner() {
+  const list = document.getElementById("expiry-list");
+  const expiringItems = getExpiringItems(pantryItems, new Date(), 7);
+
+  list.replaceChildren();
+  setText(
+    "expiry-summary",
+    expiringItems.length === 0
+      ? "Nothing urgent"
+      : `${expiringItems.length} ${expiringItems.length === 1 ? "item" : "items"} to plan`,
+  );
+
+  if (expiringItems.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "expiry-empty";
+    empty.textContent = "No pantry items expire in the next seven days.";
+    list.append(empty);
+    return;
+  }
+
+  for (const item of expiringItems) {
+    const row = document.createElement("li");
+    const name = document.createElement("strong");
+    const timing = document.createElement("span");
+
+    row.className = "expiry-item";
+    name.textContent = item.name;
+    timing.textContent = formatExpiryTiming(item.daysUntil);
+    row.append(name, timing);
+    list.append(row);
+  }
+}
+
 function renderDashboard() {
   const summary = getInventorySummary(pantryItems);
 
@@ -55,6 +99,7 @@ function renderDashboard() {
   setText("category-count", summary.categoryCount);
   setText("last-updated", `Updated ${new Intl.DateTimeFormat("en-SG", { dateStyle: "medium" }).format(new Date())}`);
   renderInventory(pantryItems);
+  renderExpiryPlanner();
 }
 
 renderDashboard();
