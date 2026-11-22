@@ -182,6 +182,34 @@ h2 {
   font-size: 0.82rem;
 }
 
+.panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.export-button {
+  min-height: 2.55rem;
+  padding: 0.55rem 0.85rem;
+  color: white;
+  background: var(--brand);
+  border: 1px solid var(--brand);
+  border-radius: 0.6rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 750;
+}
+
+.export-button:hover {
+  background: #1c5d4a;
+}
+
+.export-button:focus-visible {
+  outline: 3px solid rgba(36, 112, 90, 0.28);
+  outline-offset: 2px;
+}
+
 .table-wrap {
   overflow-x: auto;
 }
@@ -263,6 +291,12 @@ tbody tr:last-child td {
 
   .panel {
     padding: 1rem;
+  }
+
+  .panel-actions {
+    width: 100%;
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   th,

@@ -2,6 +2,8 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 
 const {
+  buildInventoryCsv,
+  escapeCsvCell,
   formatCurrency,
   getInventorySummary,
   getItemValue,
@@ -41,5 +43,34 @@ test("getInventorySummary handles an empty pantry", () => {
 
 test("formatCurrency uses Singapore dollar formatting by default", () => {
   assert.equal(formatCurrency(12.5), "$12.50");
+});
+
+test("escapeCsvCell quotes commas and doubles embedded quotes", () => {
+  assert.equal(escapeCsvCell('Sauce, "hot"'), '"Sauce, ""hot"""');
+});
+
+test("escapeCsvCell neutralizes spreadsheet formula prefixes", () => {
+  assert.equal(escapeCsvCell("=1+1"), '"\'=1+1"');
+  assert.equal(escapeCsvCell("  @SUM(A1:A2)"), '"\'  @SUM(A1:A2)"');
+  assert.equal(escapeCsvCell("ordinary item"), '"ordinary item"');
+});
+
+test("buildInventoryCsv exports headers, values, and estimated totals", () => {
+  const csv = buildInventoryCsv([
+    {
+      name: "Rice",
+      category: "Grains",
+      quantity: 2,
+      unit: "bags",
+      unitPrice: 8.9,
+      expires: "2027-06-18",
+    },
+  ]);
+
+  assert.equal(
+    csv,
+    '"Item","Category","Quantity","Unit","Unit price","Estimated value","Expires"\r\n' +
+      '"Rice","Grains","2","bags","8.90","17.80","2027-06-18"',
+  );
 });
 
