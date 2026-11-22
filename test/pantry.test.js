@@ -2,6 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 
 const {
+  calculateBudgetProgress,
   formatCurrency,
   getInventorySummary,
   getItemValue,
@@ -41,5 +42,30 @@ test("getInventorySummary handles an empty pantry", () => {
 
 test("formatCurrency uses Singapore dollar formatting by default", () => {
   assert.equal(formatCurrency(12.5), "$12.50");
+});
+
+test("calculateBudgetProgress reports remaining budget", () => {
+  assert.deepEqual(calculateBudgetProgress(238.4, 300), {
+    spent: 238.4,
+    target: 300,
+    remaining: 61.6,
+    overBy: 0,
+    percent: 79,
+  });
+});
+
+test("calculateBudgetProgress reports overspend without a negative remainder", () => {
+  assert.deepEqual(calculateBudgetProgress(325.25, 300), {
+    spent: 325.25,
+    target: 300,
+    remaining: 0,
+    overBy: 25.25,
+    percent: 108,
+  });
+});
+
+test("calculateBudgetProgress rejects invalid targets", () => {
+  assert.throws(() => calculateBudgetProgress(100, 0), /positive number/);
+  assert.throws(() => calculateBudgetProgress(100, Number.NaN), /positive number/);
 });
 

@@ -45,6 +45,22 @@
         </article>
       </section>
 
+      <section class="panel budget-panel" aria-labelledby="budget-title">
+        <div class="budget-copy">
+          <p class="eyebrow">GROCERY BUDGET</p>
+          <h2 id="budget-title">Monthly spend target</h2>
+          <p id="budget-detail" class="budget-detail" role="status" aria-live="polite"></p>
+        </div>
+        <form class="budget-form" id="budget-form">
+          <label for="budget-target">Target (SGD)</label>
+          <div class="budget-input-row">
+            <input id="budget-target" name="budget-target" type="number" min="1" step="1" value="300" inputmode="decimal" />
+            <button type="submit">Save target</button>
+          </div>
+        </form>
+        <progress id="budget-progress" max="300" value="0">0%</progress>
+      </section>
+
       <section class="panel" id="inventory" aria-labelledby="inventory-title">
         <div class="panel-heading">
           <div>
