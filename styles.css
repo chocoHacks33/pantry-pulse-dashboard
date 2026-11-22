@@ -173,6 +173,76 @@ h2 {
   padding: 1.4rem;
 }
 
+.budget-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 1rem 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.budget-detail {
+  margin: 0.7rem 0 0;
+  color: var(--muted);
+}
+
+.budget-detail.is-over {
+  color: #9b3f28;
+  font-weight: 750;
+}
+
+.budget-form label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.budget-input-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.budget-input-row input,
+.budget-input-row button {
+  min-height: 2.65rem;
+  border-radius: 0.6rem;
+  font: inherit;
+}
+
+.budget-input-row input {
+  width: 8rem;
+  padding: 0.55rem 0.7rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.budget-input-row button {
+  padding: 0.55rem 0.85rem;
+  color: white;
+  background: var(--brand);
+  border: 1px solid var(--brand);
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.budget-input-row input:focus-visible,
+.budget-input-row button:focus-visible {
+  outline: 3px solid rgba(36, 112, 90, 0.28);
+  outline-offset: 2px;
+}
+
+.budget-panel progress {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 0.8rem;
+  overflow: hidden;
+  accent-color: var(--brand);
+  border: 0;
+  border-radius: 999px;
+}
+
 .panel-heading {
   margin-bottom: 1.15rem;
 }
@@ -263,6 +333,15 @@ tbody tr:last-child td {
 
   .panel {
     padding: 1rem;
+  }
+
+  .budget-panel {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .budget-input-row input {
+    width: 100%;
   }
 
   th,

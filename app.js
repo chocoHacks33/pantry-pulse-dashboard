@@ -9,7 +9,16 @@ const pantryItems = [
   { id: 8, name: "Tomato passata", category: "Sauces", quantity: 1, unit: "bottle", unitPrice: 3.8, expires: "2026-11-29", restockAt: 2 },
 ];
 
-const { formatCurrency, getInventorySummary, getItemValue } = PantryMetrics;
+const {
+  calculateBudgetProgress,
+  formatCurrency,
+  getInventorySummary,
+  getItemValue,
+} = PantryMetrics;
+
+const MONTHLY_SPEND = 238.4;
+const DEFAULT_BUDGET = 300;
+const BUDGET_STORAGE_KEY = "pantry-pulse-monthly-budget";
 
 function setText(id, value) {
   document.getElementById(id).textContent = value;
@@ -46,6 +55,59 @@ function renderInventory(items) {
   }
 }
 
+function readStoredBudget() {
+  try {
+    const stored = Number(localStorage.getItem(BUDGET_STORAGE_KEY));
+    return Number.isFinite(stored) && stored > 0 ? stored : DEFAULT_BUDGET;
+  } catch {
+    return DEFAULT_BUDGET;
+  }
+}
+
+function saveBudget(target) {
+  try {
+    localStorage.setItem(BUDGET_STORAGE_KEY, String(target));
+  } catch {
+    // The dashboard still works when storage is disabled.
+  }
+}
+
+function renderBudget(target) {
+  const progress = calculateBudgetProgress(MONTHLY_SPEND, target);
+  const meter = document.getElementById("budget-progress");
+  const detail = document.getElementById("budget-detail");
+
+  meter.max = progress.target;
+  meter.value = Math.min(progress.spent, progress.target);
+  meter.textContent = `${progress.percent}%`;
+  detail.classList.toggle("is-over", progress.overBy > 0);
+  detail.textContent = progress.overBy > 0
+    ? `${formatCurrency(progress.spent)} spent — ${formatCurrency(progress.overBy)} over target.`
+    : `${formatCurrency(progress.spent)} spent — ${formatCurrency(progress.remaining)} remaining.`;
+}
+
+function initializeBudget() {
+  const form = document.getElementById("budget-form");
+  const input = document.getElementById("budget-target");
+  const initialTarget = readStoredBudget();
+
+  input.value = initialTarget;
+  renderBudget(initialTarget);
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const target = Number(input.value);
+    if (!Number.isFinite(target) || target <= 0) {
+      input.setCustomValidity("Enter a budget greater than zero.");
+      input.reportValidity();
+      return;
+    }
+
+    input.setCustomValidity("");
+    saveBudget(target);
+    renderBudget(target);
+  });
+}
+
 function renderDashboard() {
   const summary = getInventorySummary(pantryItems);
 
@@ -55,6 +117,7 @@ function renderDashboard() {
   setText("category-count", summary.categoryCount);
   setText("last-updated", `Updated ${new Intl.DateTimeFormat("en-SG", { dateStyle: "medium" }).format(new Date())}`);
   renderInventory(pantryItems);
+  initializeBudget();
 }
 
 renderDashboard();
