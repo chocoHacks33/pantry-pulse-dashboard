@@ -9,7 +9,12 @@ const pantryItems = [
   { id: 8, name: "Tomato passata", category: "Sauces", quantity: 1, unit: "bottle", unitPrice: 3.8, expires: "2026-11-29", restockAt: 2 },
 ];
 
-const { formatCurrency, getInventorySummary, getItemValue } = PantryMetrics;
+const {
+  formatCurrency,
+  getInventorySummary,
+  getItemValue,
+  getRestockItems,
+} = PantryMetrics;
 
 function setText(id, value) {
   document.getElementById(id).textContent = value;
@@ -46,6 +51,41 @@ function renderInventory(items) {
   }
 }
 
+function renderRestockAlerts() {
+  const list = document.getElementById("restock-list");
+  const restockItems = getRestockItems(pantryItems);
+
+  list.replaceChildren();
+  setText(
+    "restock-summary",
+    restockItems.length === 0
+      ? "Stock levels look good"
+      : `${restockItems.length} ${restockItems.length === 1 ? "item" : "items"} at threshold`,
+  );
+
+  if (restockItems.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "restock-empty";
+    empty.textContent = "No items need to be added to the next shopping list.";
+    list.append(empty);
+    return;
+  }
+
+  for (const item of restockItems) {
+    const row = document.createElement("li");
+    const name = document.createElement("strong");
+    const stock = document.createElement("span");
+    const recommendation = document.createElement("em");
+
+    row.className = "restock-item";
+    name.textContent = item.name;
+    stock.textContent = `${item.quantity} ${item.unit} on hand · threshold ${item.restockAt}`;
+    recommendation.textContent = `Buy ${item.unitsNeeded} more`;
+    row.append(name, stock, recommendation);
+    list.append(row);
+  }
+}
+
 function renderDashboard() {
   const summary = getInventorySummary(pantryItems);
 
@@ -55,6 +95,7 @@ function renderDashboard() {
   setText("category-count", summary.categoryCount);
   setText("last-updated", `Updated ${new Intl.DateTimeFormat("en-SG", { dateStyle: "medium" }).format(new Date())}`);
   renderInventory(pantryItems);
+  renderRestockAlerts();
 }
 
 renderDashboard();
