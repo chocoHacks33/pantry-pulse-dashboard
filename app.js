@@ -57,5 +57,9 @@ function renderDashboard() {
   renderInventory(pantryItems);
 }
 
+document.getElementById("print-dashboard").addEventListener("click", () => {
+  window.print();
+});
+
 renderDashboard();
 
