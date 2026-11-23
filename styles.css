@@ -265,9 +265,63 @@ tbody tr:last-child td {
     padding: 1rem;
   }
 
+  table,
+  thead,
+  tbody,
+  tr,
   th,
   td {
-    padding: 0.8rem 0.55rem;
+    display: block;
+  }
+
+  thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  tbody {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  tbody tr {
+    display: grid;
+    gap: 0.65rem;
+    padding: 0.95rem;
+    border: 1px solid var(--line);
+    border-radius: 0.85rem;
+  }
+
+  td {
+    display: grid;
+    grid-template-columns: minmax(5.7rem, 0.7fr) 1fr;
+    gap: 0.8rem;
+    align-items: baseline;
+    padding: 0;
+    text-align: right;
+    border: 0;
+  }
+
+  td::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .item-name {
+    overflow-wrap: anywhere;
+  }
+
+  .category-pill {
+    justify-self: end;
   }
 }
 

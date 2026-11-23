@@ -15,10 +15,11 @@ function setText(id, value) {
   document.getElementById(id).textContent = value;
 }
 
-function createCell(value, className = "") {
+function createCell(value, className = "", label = "") {
   const cell = document.createElement("td");
   cell.textContent = value;
   if (className) cell.className = className;
+  if (label) cell.dataset.label = label;
   return cell;
 }
 
@@ -33,14 +34,15 @@ function renderInventory(items) {
 
     category.className = "category-pill";
     category.textContent = item.category;
+    categoryCell.dataset.label = "Category";
     categoryCell.append(category);
 
     row.append(
-      createCell(item.name, "item-name"),
+      createCell(item.name, "item-name", "Item"),
       categoryCell,
-      createCell(`${item.quantity} ${item.unit}`, "number-cell"),
-      createCell(formatCurrency(item.unitPrice), "number-cell"),
-      createCell(formatCurrency(getItemValue(item)), "number-cell"),
+      createCell(`${item.quantity} ${item.unit}`, "number-cell", "On hand"),
+      createCell(formatCurrency(item.unitPrice), "number-cell", "Unit price"),
+      createCell(formatCurrency(getItemValue(item)), "number-cell", "Value"),
     );
     body.append(row);
   }
