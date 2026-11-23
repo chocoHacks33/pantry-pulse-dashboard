@@ -9,7 +9,7 @@ const pantryItems = [
   { id: 8, name: "Tomato passata", category: "Sauces", quantity: 1, unit: "bottle", unitPrice: 3.8, expires: "2026-11-29", restockAt: 2 },
 ];
 
-const { formatCurrency, getInventorySummary, getItemValue } = PantryMetrics;
+const { formatCurrency, getInventorySummary, getItemValue, sortInventory } = PantryMetrics;
 
 function setText(id, value) {
   document.getElementById(id).textContent = value;
@@ -54,8 +54,12 @@ function renderDashboard() {
   setText("inventory-value", formatCurrency(summary.totalValue));
   setText("category-count", summary.categoryCount);
   setText("last-updated", `Updated ${new Intl.DateTimeFormat("en-SG", { dateStyle: "medium" }).format(new Date())}`);
-  renderInventory(pantryItems);
+  renderInventory(sortInventory(pantryItems));
 }
+
+document.getElementById("inventory-sort").addEventListener("change", (event) => {
+  renderInventory(sortInventory(pantryItems, event.target.value));
+});
 
 renderDashboard();
 

@@ -182,6 +182,39 @@ h2 {
   font-size: 0.82rem;
 }
 
+.inventory-tools {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.sort-field {
+  display: grid;
+  width: min(100%, 18rem);
+  gap: 0.4rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.sort-field select {
+  width: 100%;
+  padding: 0.72rem 2.2rem 0.72rem 0.8rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0.7rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.sort-field select:focus-visible {
+  outline: 3px solid rgba(36, 112, 90, 0.24);
+  outline-offset: 2px;
+  border-color: var(--brand);
+}
+
 .table-wrap {
   overflow-x: auto;
 }

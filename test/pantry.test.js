@@ -5,7 +5,26 @@ const {
   formatCurrency,
   getInventorySummary,
   getItemValue,
+  sortInventory,
 } = require("../lib/pantry.js");
+
+test("sortInventory supports value and category order without mutating input", () => {
+  const items = [
+    { name: "Peanut butter", category: "Spreads", quantity: 1, unitPrice: 6.75 },
+    { name: "Chickpeas", category: "Canned goods", quantity: 4, unitPrice: 1.85 },
+    { name: "Coconut milk", category: "Canned goods", quantity: 2, unitPrice: 2.2 },
+  ];
+
+  assert.deepEqual(
+    sortInventory(items, "value-high").map((item) => item.name),
+    ["Chickpeas", "Peanut butter", "Coconut milk"],
+  );
+  assert.deepEqual(
+    sortInventory(items, "category").map((item) => item.name),
+    ["Chickpeas", "Coconut milk", "Peanut butter"],
+  );
+  assert.equal(items[0].name, "Peanut butter");
+});
 
 test("getItemValue multiplies quantity by unit price", () => {
   assert.equal(getItemValue({ quantity: 3, unitPrice: 2.45 }), 7.35);

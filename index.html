@@ -54,6 +54,18 @@
           <p class="updated" id="last-updated" role="status" aria-live="polite"></p>
         </div>
 
+        <div class="inventory-tools">
+          <label class="sort-field" for="inventory-sort">
+            <span>Sort inventory</span>
+            <select id="inventory-sort">
+              <option value="name">Item name</option>
+              <option value="category">Category</option>
+              <option value="quantity-high">Quantity: high to low</option>
+              <option value="value-high">Value: high to low</option>
+            </select>
+          </label>
+        </div>
+
         <div class="table-wrap">
           <table>
             <caption class="sr-only">Current pantry items and their quantities, categories, and estimated values</caption>
