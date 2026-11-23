@@ -16,6 +16,7 @@ npm run check
 ## What is included
 
 - A responsive pantry inventory table
+- Fast item and category search with a live result count
 - Summary cards for item count, total units, inventory value, and category coverage
 - Semantic table markup and a live last-updated status
 - Pure, reusable inventory calculations covered by Node's built-in test runner

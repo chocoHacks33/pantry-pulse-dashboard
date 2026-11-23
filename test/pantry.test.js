@@ -2,10 +2,30 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 
 const {
+  filterInventory,
   formatCurrency,
   getInventorySummary,
   getItemValue,
 } = require("../lib/pantry.js");
+
+test("filterInventory searches item names and categories case-insensitively", () => {
+  const items = [
+    { name: "Jasmine rice", category: "Grains" },
+    { name: "Chickpeas", category: "Canned goods" },
+    { name: "Rolled oats", category: "Breakfast" },
+  ];
+
+  assert.deepEqual(filterInventory(items, "RICE"), [items[0]]);
+  assert.deepEqual(filterInventory(items, "canned"), [items[1]]);
+});
+
+test("filterInventory returns a copy for a blank query", () => {
+  const items = [{ name: "Jasmine rice", category: "Grains" }];
+  const result = filterInventory(items, "   ");
+
+  assert.deepEqual(result, items);
+  assert.notEqual(result, items);
+});
 
 test("getItemValue multiplies quantity by unit price", () => {
   assert.equal(getItemValue({ quantity: 3, unitPrice: 2.45 }), 7.35);
