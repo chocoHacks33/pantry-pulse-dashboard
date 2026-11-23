@@ -173,6 +173,10 @@ h2 {
   padding: 1.4rem;
 }
 
+.insights-panel {
+  margin-bottom: 1.25rem;
+}
+
 .panel-heading {
   margin-bottom: 1.15rem;
 }
@@ -180,6 +184,47 @@ h2 {
 .updated {
   margin-bottom: 0;
   font-size: 0.82rem;
+}
+
+.category-insights {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
+}
+
+.category-insight {
+  min-width: 0;
+}
+
+.insight-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.42rem;
+  font-size: 0.82rem;
+}
+
+.insight-heading strong,
+.insight-heading span {
+  overflow-wrap: anywhere;
+}
+
+.insight-heading span {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.value-track {
+  height: 0.55rem;
+  overflow: hidden;
+  background: var(--brand-soft);
+  border-radius: 999px;
+}
+
+.value-fill {
+  height: 100%;
+  background: var(--brand);
+  border-radius: inherit;
 }
 
 .table-wrap {
@@ -258,6 +303,10 @@ tbody tr:last-child td {
   }
 
   .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-insights {
     grid-template-columns: 1fr;
   }
 
