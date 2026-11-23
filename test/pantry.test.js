@@ -3,9 +3,30 @@ const assert = require("node:assert/strict");
 
 const {
   formatCurrency,
+  getCategoryBreakdown,
   getInventorySummary,
   getItemValue,
 } = require("../lib/pantry.js");
+
+test("getCategoryBreakdown ranks categories and calculates value shares", () => {
+  const breakdown = getCategoryBreakdown([
+    { category: "Grains", quantity: 2, unitPrice: 5 },
+    { category: "Spreads", quantity: 1, unitPrice: 6 },
+    { category: "Grains", quantity: 1, unitPrice: 4 },
+  ]);
+
+  assert.deepEqual(breakdown, [
+    { category: "Grains", value: 14, percent: 70 },
+    { category: "Spreads", value: 6, percent: 30 },
+  ]);
+});
+
+test("getCategoryBreakdown handles zero-value categories", () => {
+  assert.deepEqual(
+    getCategoryBreakdown([{ category: "Spices", quantity: 0, unitPrice: 3 }]),
+    [{ category: "Spices", value: 0, percent: 0 }],
+  );
+});
 
 test("getItemValue multiplies quantity by unit price", () => {
   assert.equal(getItemValue({ quantity: 3, unitPrice: 2.45 }), 7.35);

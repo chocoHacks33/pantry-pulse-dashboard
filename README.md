@@ -17,6 +17,7 @@ npm run check
 
 - A responsive pantry inventory table
 - Summary cards for item count, total units, inventory value, and category coverage
+- Accessible category value bars ranked by replacement cost
 - Semantic table markup and a live last-updated status
 - Pure, reusable inventory calculations covered by Node's built-in test runner
 

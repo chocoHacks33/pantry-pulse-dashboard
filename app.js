@@ -9,7 +9,12 @@ const pantryItems = [
   { id: 8, name: "Tomato passata", category: "Sauces", quantity: 1, unit: "bottle", unitPrice: 3.8, expires: "2026-11-29", restockAt: 2 },
 ];
 
-const { formatCurrency, getInventorySummary, getItemValue } = PantryMetrics;
+const {
+  formatCurrency,
+  getCategoryBreakdown,
+  getInventorySummary,
+  getItemValue,
+} = PantryMetrics;
 
 function setText(id, value) {
   document.getElementById(id).textContent = value;
@@ -46,6 +51,38 @@ function renderInventory(items) {
   }
 }
 
+function renderCategoryInsights(items) {
+  const container = document.getElementById("category-insights");
+  container.replaceChildren();
+
+  for (const insight of getCategoryBreakdown(items)) {
+    const card = document.createElement("article");
+    const heading = document.createElement("div");
+    const label = document.createElement("strong");
+    const value = document.createElement("span");
+    const track = document.createElement("div");
+    const fill = document.createElement("div");
+
+    card.className = "category-insight";
+    heading.className = "insight-heading";
+    label.textContent = insight.category;
+    value.textContent = `${formatCurrency(insight.value)} · ${insight.percent}%`;
+    track.className = "value-track";
+    track.setAttribute("role", "progressbar");
+    track.setAttribute("aria-label", `${insight.category} share of inventory value`);
+    track.setAttribute("aria-valuemin", "0");
+    track.setAttribute("aria-valuemax", "100");
+    track.setAttribute("aria-valuenow", String(insight.percent));
+    fill.className = "value-fill";
+    fill.style.width = `${insight.percent}%`;
+
+    heading.append(label, value);
+    track.append(fill);
+    card.append(heading, track);
+    container.append(card);
+  }
+}
+
 function renderDashboard() {
   const summary = getInventorySummary(pantryItems);
 
@@ -54,6 +91,7 @@ function renderDashboard() {
   setText("inventory-value", formatCurrency(summary.totalValue));
   setText("category-count", summary.categoryCount);
   setText("last-updated", `Updated ${new Intl.DateTimeFormat("en-SG", { dateStyle: "medium" }).format(new Date())}`);
+  renderCategoryInsights(pantryItems);
   renderInventory(pantryItems);
 }
 
